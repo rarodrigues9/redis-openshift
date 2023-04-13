@@ -17,7 +17,6 @@ items:
       redis-master: "true"
       role: master
     strategy:
-      resources: {}
       rollingParams:
         intervalSeconds: 1
         maxSurge: 25%
@@ -74,6 +73,5 @@ items:
           name: redis:latest
           namespace: redis
       type: ImageChange
-  status: {}
 kind: List
 metadata: {}
