@@ -3,7 +3,6 @@ items:
 - apiVersion: build.openshift.io/v1
   kind: BuildConfig
   metadata:
-    creationTimestamp: null
     labels:
       app: redis-build
       name: redis
@@ -14,9 +13,6 @@ items:
       to:
         kind: ImageStreamTag
         name: redis:latest
-    postCommit: {}
-    resources: {}
-    runPolicy: Serial
     source:
       contextDir: image
       git:
@@ -29,81 +25,17 @@ items:
           name: centos7:latest
           namespace: openshift
       type: Docker
-    triggers: []
-  status:
-    lastVersion: 0
+---
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
     labels:
       build: redis
     name: redis
-  status:
-    dockerImageRepository: ""
+---
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   metadata:
-    creationTimestamp: null
-    generation: 1
-    labels:
-      app: redis
-    name: redis
-  spec:
-    replicas: 3
-    selector:
-      app: redis
-    strategy:
-      resources: {}
-      rollingParams:
-        intervalSeconds: 1
-        maxSurge: 25%
-        maxUnavailable: 25%
-        timeoutSeconds: 600
-        updatePeriodSeconds: 1
-      type: Rolling
-    template:
-      metadata:
-        creationTimestamp: null
-        labels:
-          app: redis
-      spec:
-        containers:
-        - image: ' '
-          imagePullPolicy: Always
-          name: redis
-          ports:
-          - containerPort: 6379
-            protocol: TCP
-          resources: {}
-          terminationMessagePath: /dev/termination-log
-          volumeMounts:
-          - mountPath: /redis-master-data
-            name: data
-        dnsPolicy: ClusterFirst
-        restartPolicy: Always
-        securityContext: {}
-        terminationGracePeriodSeconds: 30
-        volumes:
-        - emptyDir: {}
-          name: data
-    test: false
-    triggers:
-    - type: ConfigChange
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-        - redis
-        from:
-          kind: ImageStreamTag
-          name: redis:latest
-          namespace: redis
-      type: ImageChange
-  status: {}
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
-  metadata:
-    creationTimestamp: null
-    generation: 1
     labels:
       app: redis-master
       redis-master: "true"
@@ -111,14 +43,13 @@ items:
       role: master
     name: redis-master
   spec:
-    replicas: 1
+    replicas: 3
     selector:
       app: redis-master
       redis-master: "true"
       redis-sentinel: "true"
       role: master
     strategy:
-      resources: {}
       rollingParams:
         intervalSeconds: 1
         maxSurge: 25%
@@ -128,7 +59,6 @@ items:
       type: Rolling
     template:
       metadata:
-        creationTimestamp: null
         labels:
           app: redis-master
           redis-master: "true"
@@ -145,7 +75,6 @@ items:
           ports:
           - containerPort: 6379
             protocol: TCP
-          resources: {}
           terminationMessagePath: /dev/termination-log
           volumeMounts:
           - mountPath: /redis-master-data
@@ -189,12 +118,10 @@ items:
           namespace: redis
       type: ImageChange
     - type: ConfigChange
-  status: {}
+---
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   metadata:
-    creationTimestamp: null
-    generation: 1
     labels:
       app: redis-sentinel
       redis-sentinel: "true"
@@ -205,7 +132,6 @@ items:
       app: redis-sentinel
       redis-sentinel: "true"
     strategy:
-      resources: {}
       rollingParams:
         intervalSeconds: 1
         maxSurge: 25%
@@ -215,7 +141,6 @@ items:
       type: Rolling
     template:
       metadata:
-        creationTimestamp: null
         labels:
           app: redis-sentinel
           redis-sentinel: "true"
@@ -254,11 +179,10 @@ items:
           name: redis:latest
           namespace: redis
       type: ImageChange
-  status: {}
+---
 - apiVersion: v1
   kind: Service
   metadata:
-    creationTimestamp: null
     labels:
       name: master
       role: service
@@ -270,14 +194,11 @@ items:
       targetPort: 6379
     selector:
       redis-master: "true"
-    sessionAffinity: None
     type: ClusterIP
-  status:
-    loadBalancer: {}
+---
 - apiVersion: v1
   kind: Service
   metadata:
-    creationTimestamp: null
     labels:
       name: sentinel
       role: service
@@ -289,9 +210,6 @@ items:
       targetPort: 26379
     selector:
       redis-sentinel: "true"
-    sessionAffinity: None
     type: ClusterIP
-  status:
-    loadBalancer: {}
 kind: List
 metadata: {}
