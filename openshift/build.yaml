@@ -12,8 +12,6 @@ spec:
     to:
       kind: ImageStreamTag
       name: redis:latest
-  postCommit: {}
-  resources: {}
   runPolicy: Serial
   source:
     contextDir: image
@@ -24,7 +22,7 @@ spec:
     dockerStrategy:
       from:
         kind: ImageStreamTag
-        name: rhel7:latest
+        name: centos7:latest
         namespace: openshift
     type: Docker
   triggers: []
