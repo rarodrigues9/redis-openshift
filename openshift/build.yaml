@@ -18,13 +18,13 @@ spec:
   source:
     contextDir: image
     git:
-      uri: https://github.com/mangirdaz/redis-openshift.git
+      uri: https://github.com/rarodrigues9/redis-openshift.git
     type: Git
   strategy:
     dockerStrategy:
       from:
         kind: ImageStreamTag
-        name: rhel7:latest
+        name: ubi:latest
         namespace: openshift
     type: Docker
   triggers: []
