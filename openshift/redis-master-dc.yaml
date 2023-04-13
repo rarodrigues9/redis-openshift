@@ -34,7 +34,7 @@ items:
           role: master
       spec:
         containers:
-        - image: image-registry.openshift-image-registry.svc:5000/redis/redis
+        - image: image-registry.openshift-image-registry.svc:5000/redis-cluster/redis:latest
           imagePullPolicy: Always
           name: redis
           env:
@@ -46,7 +46,7 @@ items:
           ports:
             - containerPort: 6379
           resources: {}
-        - image: image-registry.openshift-image-registry.svc:5000/redis/redis
+        - image: image-registry.openshift-image-registry.svc:5000/redis-cluster/redis:latest
           imagePullPolicy: Always
           name: sentinel
           resources: {}
