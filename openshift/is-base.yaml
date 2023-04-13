@@ -1,10 +1,13 @@
-apiVersion: v1
+apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
-  generation: 2
-  labels:
-    app: rhel7-base
-    name: rhel7-base
-  name: rhel7
+  name: ubi
+  namespace: openshift
 spec:
-  dockerImageRepository: registry.access.redhat.com/rhel7
+  tags:
+  - from:
+      kind: DockerImage
+      name: registry.redhat.io/ubi8/ubi:latest
+    name: latest
+    referencePolicy:
+      type: Source
